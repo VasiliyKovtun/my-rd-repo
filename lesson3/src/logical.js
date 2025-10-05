@@ -1,0 +1,36 @@
+
+const n = 5;
+const n2 = 9;
+const s = '9';
+const s2 = 'true';
+const b = true;
+const u = undefined;
+const nu = null;
+
+console.log(n > n2);
+console.log(n < s);
+console.log(b <= nu);
+console.log(s2 == b);
+console.log(b == 1);
+console.log('--------------');
+console.log(u == nu);
+console.log(u === nu);
+console.log('--------------');
+console.log(n2 != s);
+console.log(n2 !== s);
+console.log(u !== nu);
+console.log('---------------&&');
+console.log(n < n2 && n > b);
+console.log(n === n2 && n > b);
+console.log('---------------||');
+console.log(n < n2 || n > b);
+console.log(n === n2 || n > b);
+console.log(n === n2 || n < b);
+console.log('---------------!');
+console.log(!(n === n2 || n < b));
+console.log(!b);
+console.log('---------------??');
+let c = n ?? 'new value';
+console.log(c);
+c = u ?? 'new value';
+console.log(c);
