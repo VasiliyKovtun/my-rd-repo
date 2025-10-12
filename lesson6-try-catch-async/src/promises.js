@@ -16,4 +16,4 @@ function processData(json) {
     console.log(json);
 }
 
-getData();
+getData().then();
