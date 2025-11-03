@@ -1,0 +1,69 @@
+{
+  "consumer": {
+    "name": "dog-consumer"
+  },
+  "interactions": [
+    {
+      "description": "a request for dogs",
+      "providerStates": [
+        {
+          "name": "dogs exist"
+        }
+      ],
+      "request": {
+        "headers": {
+          "accept": "*/*",
+          "x-api-key": "live_FqezAfaSNxE5FfT5cmNoHNT8Wq4JrnDhGGlKnw2pGqlYi5t8c9pGJDTa9Nssz9ob"
+        },
+        "method": "GET",
+        "path": "/images"
+      },
+      "response": {
+        "body": [
+          {
+            "breed_ids": "110",
+            "breeds": [],
+            "created_at": "2025-11-02T16:01:20.000Z",
+            "height": 280,
+            "id": "neHuCT27X",
+            "original_filename": "korgi.jpg",
+            "sub_id": "vk",
+            "url": "https://cdn2.thedogapi.com/images/neHuCT27X.jpg",
+            "width": 350
+          }
+        ],
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "16.0.2"
+    },
+    "pactRust": {
+      "ffi": "0.4.28",
+      "models": "1.3.5"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "dog-provider"
+  }
+}
