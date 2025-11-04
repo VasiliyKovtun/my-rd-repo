@@ -1,1 +1,1 @@
-# This is the project for lesson 13 - contract testing 
+# This is the project for lesson 13 - integration testing 
