@@ -1,0 +1,228 @@
+{
+	"info": {
+		"_postman_id": "05f8dca9-6e9f-45cf-bb8c-c15e230b4345",
+		"name": "joke_api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5457569"
+	},
+	"item": [
+		{
+			"name": "get joke_ten",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"The response is array\", function () {",
+							"    const response = pm.response.json();",
+							"",
+							"    pm.expect(response).to.be.an(\"array\").that.is.not.empty;",
+							"});",
+							"",
+							"pm.test(\"Each item in response is a JSON object\", function () {",
+							"    const response = pm.response.json();",
+							"",
+							"    response.forEach((item, index) => {",
+							"        pm.expect(item).to.be.an(\"object\");",
+							"    });",
+							"});",
+							"",
+							"pm.test(\"Count objects should have length 10\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.length(10);",
+							"});",
+							"",
+							"pm.test(\"Each object has 4 exact properties\", function () {",
+							"    const response = pm.response.json();",
+							"    ",
+							"    response.forEach((item, index) => {",
+							"        pm.expect(item).to.have.property(\"type\");",
+							"        pm.expect(item).to.have.property(\"setup\");",
+							"        pm.expect(item).to.have.property(\"punchline\");",
+							"        pm.expect(item).to.have.property(\"id\");",
+							"    });",
+							"});",
+							"",
+							"pm.test(\"Check types of properties for each object\", function () {",
+							"    const response = pm.response.json();",
+							"    response.forEach((item, index) => {",
+							"        pm.expect(item).to.have.property(\"type\").that.is.a(\"string\");",
+							"        pm.expect(item).to.have.property(\"setup\").that.is.a(\"string\");",
+							"        pm.expect(item).to.have.property(\"punchline\").that.is.a(\"string\");",
+							"        pm.expect(item).to.have.property(\"id\").that.is.a(\"number\");",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/jokes/ten",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"jokes",
+						"ten"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get joke types",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Each item in response is a string\", function () {",
+							"    const response = pm.response.json();",
+							"",
+							"    response.forEach((item, index) => {",
+							"        pm.expect(item).to.be.a(\"string\");",
+							"    });",
+							"});",
+							"",
+							"pm.test(\"Type array  contains 'general'\", function () {",
+							"    const response = pm.response.json();",
+							"",
+							"    pm.expect(response).to.include(\"general\");",
+							"});",
+							"",
+							"pm.test(\"Type array  contains 'knock-knock'\", function () {",
+							"    const response = pm.response.json();",
+							"",
+							"    pm.expect(response).to.include(\"knock-knock\");",
+							"});",
+							"",
+							"pm.test(\"Type array  contains 'programming'\", function () {",
+							"    const response = pm.response.json();",
+							"",
+							"    pm.expect(response).to.include(\"programming\");",
+							"});",
+							"",
+							"pm.test(\"Type array  contains 'dad'\", function () {",
+							"    const response = pm.response.json();",
+							"",
+							"    pm.expect(response).to.include(\"dad\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/types",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get joke_ten by type",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Each object has programming type\", function () {",
+							"    const response = pm.response.json();",
+							"    ",
+							"    response.forEach((item, index) => {",
+							"        pm.expect(item).to.have.property(\"type\").and.to.equal(\"programming\");",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/jokes/programming/ten",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"jokes",
+						"programming",
+						"ten"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": ""
+		},
+		{
+			"key": "savedItemId",
+			"value": ""
+		},
+		{
+			"key": "savedItem",
+			"value": ""
+		}
+	]
+}
