@@ -1,0 +1,384 @@
+{
+	"info": {
+		"_postman_id": "7d26f5bd-8543-41c3-939a-00a797ed6a01",
+		"name": "catApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5457569"
+	},
+	"item": [
+		{
+			"name": "images",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/images",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"images"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "images/upload",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"response is not empty, variable is saved\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.id).to.be.not.empty;",
+							"",
+							"    pm.collectionVariables.set(\"image_id\", responseJson.id);",
+							"    pm.collectionVariables.set(\"imageObject\", JSON.stringify(responseJson));",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "postman-cloud:///1f0b9bca-9cc3-4cd0-a420-6a8cc7332ea4"
+						},
+						{
+							"key": "sub_id",
+							"value": "{{sub_id}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/images/upload",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"images",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "favourites",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Add favourites and save favourites_id\", function () {",
+							"    const responseJson = pm.response.json();",
+							"",
+							"    pm.expect(responseJson.id).to.be.not.null;",
+							"    pm.collectionVariables.set(\"favourites_id\", responseJson.id);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"image_id\": \"{{image_id}}\",\n    \"sub_id\": \"{{sub_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/favourites",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"favourites"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "favourites/{favourite_id}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"The image–favourites relation has been verified\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    const savedImage = JSON.parse(pm.collectionVariables.get(\"imageObject\"));",
+							"",
+							"    pm.expect(responseJson).to.be.not.null;",
+							"    pm.expect(responseJson.image_id).to.equal(pm.variables.get(\"image_id\"));",
+							"    pm.expect(responseJson.sub_id).to.equal(pm.variables.get(\"sub_id\"));",
+							"    pm.expect(responseJson.image.url).to.equal(savedImage.url);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/favourites/{{favourites_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"favourites",
+						"{{favourites_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "votes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Add votes and save votes_id\", function () {",
+							"    const responseJson = pm.response.json();",
+							"",
+							"    pm.expect(responseJson.id).to.be.not.null;",
+							"    pm.collectionVariables.set(\"votes_id\", responseJson.id);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"image_id\": \"{{image_id}}\",\n\"sub_id\": \"{{sub_id}}\",\n\"value\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/votes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"votes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "votes/{votes_id}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"The image–votes relation has been verified\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    const savedImage = JSON.parse(pm.collectionVariables.get(\"imageObject\"));",
+							"",
+							"    pm.expect(responseJson).to.be.not.null;",
+							"    pm.expect(responseJson.image_id).to.equal(pm.variables.get(\"image_id\"));",
+							"    pm.expect(responseJson.sub_id).to.equal(pm.variables.get(\"sub_id\"));",
+							"    pm.expect(responseJson.image.url).to.equal(savedImage.url);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/votes/{{votes_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"votes",
+						"{{votes_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "image_id",
+			"value": ""
+		},
+		{
+			"key": "sub_id",
+			"value": ""
+		},
+		{
+			"key": "favourites_id",
+			"value": ""
+		},
+		{
+			"key": "imageObject",
+			"value": ""
+		},
+		{
+			"key": "votes_id",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
