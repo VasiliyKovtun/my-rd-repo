@@ -311,6 +311,262 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "favourites_not_existed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Add favourites with not existed image_id and save favourites_id_not_existed\", function () {",
+							"    const responseJson = pm.response.json();",
+							"",
+							"    pm.expect(responseJson.id).to.be.not.null;",
+							"    pm.collectionVariables.set(\"favourites_id_without_image\", responseJson.id);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function generateFakeImageId() {",
+							"    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';",
+							"    let result = '';",
+							"    for (let i = 0; i < 8; i++) {",
+							"        result += chars.charAt(Math.floor(Math.random() * chars.length));",
+							"    }",
+							"    return result;",
+							"}",
+							"",
+							"const fakeId = generateFakeImageId();",
+							"pm.collectionVariables.set(\"image_id_not_existed\", fakeId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"image_id\": \"{{image_id_not_existed}}\",\n    \"sub_id\": \"{{sub_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/favourites",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"favourites"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "favourites/{{favourites_id_without_image}}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"If request favourites with not existed image, the response is without image\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    const savedImage = JSON.parse(pm.collectionVariables.get(\"imageObject\"));",
+							"",
+							"    pm.expect(responseJson).to.be.not.null;",
+							"    pm.expect(responseJson.image_id).to.equal(pm.variables.get(\"image_id_not_existed\"));",
+							"    pm.expect(responseJson.sub_id).to.equal(pm.variables.get(\"sub_id\"));",
+							"    pm.expect(responseJson.image).to.be.empty;",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/favourites/{{favourites_id_without_image}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"favourites",
+						"{{favourites_id_without_image}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "votes_not_existed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Add votes with not existed image and save votes_id_without_image\", function () {",
+							"    const responseJson = pm.response.json();",
+							"",
+							"    pm.expect(responseJson.id).to.be.not.null;",
+							"    pm.collectionVariables.set(\"votes_id_without_image\", responseJson.id);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function generateFakeImageId() {",
+							"    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';",
+							"    let result = '';",
+							"    for (let i = 0; i < 8; i++) {",
+							"        result += chars.charAt(Math.floor(Math.random() * chars.length));",
+							"    }",
+							"    return result;",
+							"}",
+							"",
+							"const fakeId = generateFakeImageId();",
+							"pm.collectionVariables.set(\"image_id_not_existed\", fakeId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"image_id\": \"{{image_id_not_existed}}\",\n\"sub_id\": \"{{sub_id}}\",\n\"value\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/votes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"votes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "votes/{votes_id_without_image}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"If request votes with not existed image, the response is without image\", function () {",
+							"    const responseJson = pm.response.json();",
+							"",
+							"    pm.expect(responseJson).to.be.not.null;",
+							"    pm.expect(responseJson.image_id).to.equal(pm.variables.get(\"image_id_not_existed\"));",
+							"    pm.expect(responseJson.sub_id).to.equal(pm.variables.get(\"sub_id\"));",
+							"    pm.expect(responseJson.image).to.be.empty;",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/votes/{{votes_id_without_image}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"votes",
+						"{{votes_id_without_image}}"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
@@ -379,6 +635,18 @@
 		},
 		{
 			"key": "votes_id",
+			"value": ""
+		},
+		{
+			"key": "image_id_not_existed",
+			"value": ""
+		},
+		{
+			"key": "favourites_id_without_image",
+			"value": ""
+		},
+		{
+			"key": "votes_id_without_image",
 			"value": "",
 			"type": "default"
 		}
