@@ -173,6 +173,7 @@
 							"    pm.expect(responseJson.image_id).to.equal(pm.variables.get(\"image_id\"));",
 							"    pm.expect(responseJson.sub_id).to.equal(pm.variables.get(\"sub_id\"));",
 							"    pm.expect(responseJson.image.url).to.equal(savedImage.url);",
+							"    pm.expect(responseJson.image.id).to.equal(savedImage.id);",
 							"});"
 						],
 						"type": "text/javascript",
@@ -275,6 +276,7 @@
 							"    pm.expect(responseJson.image_id).to.equal(pm.variables.get(\"image_id\"));",
 							"    pm.expect(responseJson.sub_id).to.equal(pm.variables.get(\"sub_id\"));",
 							"    pm.expect(responseJson.image.url).to.equal(savedImage.url);",
+							"    pm.expect(responseJson.image.id).to.equal(savedImage.id);",
 							"});"
 						],
 						"type": "text/javascript",
