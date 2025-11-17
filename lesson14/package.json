@@ -1,0 +1,35 @@
+{
+  "name": "simple",
+  "version": "1.0.0",
+  "description": "ts simple project",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx eslint . && vitest run",
+    "lint": "eslint src/",
+    "lint:fix": "npm run lint -- --fix",
+    "build": "npm run lint && tsc --build"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "@stylistic/eslint-plugin": "^5.5.0",
+    "@stylistic/eslint-plugin-ts": "^4.4.1",
+    "@types/chai": "^5.2.3",
+    "@types/dotenv-safe": "^9.1.0",
+    "chai": "^6.2.0",
+    "dotenv-safe": "^5.0.1",
+    "eslint": "^9.38.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-unicorn": "^62.0.0",
+    "globals": "^16.4.0",
+    "prettier": "3.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.2",
+    "vitest": "^4.0.5"
+  },
+  "dependencies": {
+    "playwright": "^1.56.1"
+  }
+}
