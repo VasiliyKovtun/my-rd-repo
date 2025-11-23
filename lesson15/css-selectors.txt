@@ -1,0 +1,36 @@
+[data-testid="search-suggest-input"] - enter 'iphone 17'
+wait [data-testid="search-suggest-records"]
+find all elements in list - [data-testid="search-suggest-records"] li
+click element that contains text "iphone air"
+wait for [data-testid="selected-filter-item"]
+check that one of them contains test '  Очистити всі  '
+check that one of them contains test ' Apple '
+check that one of them contains test ' iPhone Air '
+find elements [data-testid="category_goods"] .tile-title.black-link.text-base
+check that all of them contain test ' iPhone Air '
+click on #sort
+click on #sort option[value="cheap"]
+check that option[value="cheap"] is - selected
+find elements and check that next one is equal or higher the previous [data-testid="category_goods"] .relative
+get good.id (text) from [data-testid="category_goods"] .item:nth-of-type(1) .g-id
+click on [data-testid="category_goods"] .item:nth-of-type(1) .tile-image-host
+wait .product-about__title
+find and check element contains in test the same id as in previous step - .ms-auto.color-black-60
+
+----------------------------------------------------------------------------------------------------------------
+
+[data-testid="search-suggest-input"] - enter 'iphone 17 pro max'
+click on #sort
+click on #sort option[value="expensive"]
+click on [data-testid="category_goods"] .item:nth-of-type(1) [class="compare-button"]
+get text (name) from element [data-testid="category_goods"] .item:nth-of-type(1) .tile-title.black-link.text-base
+[data-testid="search-suggest-input"] - enter 'samsung s25 ultra
+click on #sort
+click on #sort option[value="expensive"]
+click on [data-testid="category_goods"] .item:nth-of-type(1) [class="compare-button"]
+get text (name) from element [data-testid="category_goods"] .item:nth-of-type(1) .tile-title.black-link.text-base
+click on [rziconname="icon-compare"]
+wait rz-products-list-item
+click on rz-products-list-item
+check that elements text is equal to apple name from previous step  div.indent td:first-child rz-product-cell .top-block.mb-2 div:nth-child(2) > a
+check that elements text is equal to samsung name from previous step  div.indent td:nth-child(2) rz-product-cell .top-block.mb-2 div:nth-child(2) > a
