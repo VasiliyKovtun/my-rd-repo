@@ -1,0 +1,38 @@
+click on Каталог -  //rz-main-header//button[2]
+click on  Смартфони, ТВ і електроніка  -  //rz-fat-menu-old//nav/ul[1]/li[2]/a
+click on  Apple iPhone  - /rz-widget-slider//ul/li[1]/rz-category-tile/a/span[2]
+click on iPhone 17 Pro Max in the filter - //rz-filter-stack/details[8]//ul/li[6]/a
+click on 1Tb in the filter - //rz-filter-stack/details[10]//ul/li[3]/a
+find all elements in the result  - //rz-catalog-goods/div[position() <= 3]//rz-product-tile/article/a[2]
+and check that all of them contains test 'iPhone 17 Pro Max 1TB'
+click on 'Синій' in the filters - //rz-filter-stack/details[28]//li[2]/a
+find element and check that it contains text 'Apple iPhone 17 Pro Max 1TB Deep Blue'  - //rz-catalog-goods/div[position() <= 3]//rz-product-tile/article/a[2]
+click on 'Clear Blue filter' button - //rz-selected-filters//button[normalize-space(text())="Синій"]
+find and check that there are 3 elements - - //rz-catalog-goods/div[position() <= 3]//rz-product-tile/article/a[2]
+click on ' Очистити всі ' button - //rz-selected-filters//li[1]/button
+wait and check there are more than 10 elements - //rz-paginator//a
+
+--------------------------------------------------------------------------------
+
+enter 'samsung s25 ultra 1tb' - //rz-search-suggest//input
+click on first 'samsung s25' in the result -  //rz-search-suggest-content//ul/li[2]/a/img
+check text contains 'samsung s25' and '1TB' - //rz-title-block//h1
+click on "Купити" button - //*[@id="#scrollArea"]//rz-product-buy-btn//button
+wait - //rz-modal-layout
+check element contains text 'samsung s25' and '1TB'  - //rz-cart-product//rz-button-product-page//a/span
+check that amount in - //rz-cart-product//div[4]/p[2]
+    is equal to amount in - //*[@class="cart-receipt__sum-price"]/span
+click on additional service 'Сервіс «Повний захист' - //rz-modal-layout//rz-service-group[2]//div[1]/div[2][contains(normalize-space(.), "Сервіс «Повний захист»")]
+click on radio-button - //rz-modal-layout//rz-service-group[2]//rz-service-product//label
+check that amount in - //rz-modal-layout//rz-service-group[2]//rz-service-product//label//div/div[2]/div
+    is added to amount in - //*[@class="cart-receipt__sum-price"]/span
+click on ' Оформити замовлення ' button - //rz-checkout-button
+page is loaded - https://rozetka.com.ua/ua/checkout/
+
+
+
+
+
+
+
+
