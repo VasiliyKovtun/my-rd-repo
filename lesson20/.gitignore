@@ -1,0 +1,10 @@
+node_modules/
+.vscode/
+.idea/
+build/
+**/*.js
+.auth/
+reports/
+videos/
+.DS_Store
+*/.DS_Store
