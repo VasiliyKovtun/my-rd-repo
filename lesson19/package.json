@@ -5,6 +5,8 @@
     "@stylistic/eslint-plugin": "^5.6.1",
     "@stylistic/eslint-plugin-ts": "^4.4.1",
     "@types/node": "^24.10.1",
+    "allure-commandline": "^2.36.0",
+    "allure-playwright": "^3.4.3",
     "eslint": "^9.39.1",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-unicorn": "^62.0.0",
@@ -15,6 +17,10 @@
     "typescript-eslint": "^8.48.1"
   },
   "scripts": {
-    "test": "eslint . && playwright test"
+    "test": "npx playwright test",
+    "allure:generate": "npx allure generate ./allure-results --clean -o ./allure-report",
+    "allure:serve": "npx http-server ./allure-report -p 8080",
+    "allure:open": "npx allure serve ./allure-results",
+    "test:allure": "npm run test && npm run allure:generate && npm run allure:open"
   }
 }
