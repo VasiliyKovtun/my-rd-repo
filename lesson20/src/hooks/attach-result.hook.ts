@@ -12,7 +12,5 @@ export function attachResultsHook(): void {
             const screenshot = await this.page.screenshot();
             await this.attach(screenshot, 'image/png');
         }
-
-        await this.closePage();
     });
 }
