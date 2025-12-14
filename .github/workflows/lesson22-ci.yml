@@ -1,0 +1,42 @@
+name: Lesson22 Playwright CI
+
+on:
+  push:
+    branches: [ master, lesson22 ]
+  pull_request:
+    branches: [ master, lesson22 ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lesson22
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: lesson22/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Run Playwright tests with Allure report
+        run: npm run test:allure
+
+      - name: Upload Allure single-file report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson22-allure-report
+          path: |
+            ${{ github.workspace }}/lesson22/allure-report/index.html
+          retention-days: 14
