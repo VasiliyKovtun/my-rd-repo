@@ -2,9 +2,9 @@ name: Lesson22 Playwright CI
 
 on:
   push:
-    branches: [ master, lesson22 ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, lesson22 ]
+    branches: [ master ]
 
 jobs:
   test:
