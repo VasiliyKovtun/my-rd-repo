@@ -1,0 +1,20 @@
+services:
+  lesson23-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.playwright
+    depends_on:
+      - lesson23-app
+    environment:
+      - BASE_URL=http://lesson23-app
+      - DOCKER=true
+    volumes:
+      - ./allure-results:/tests/allure-results
+      - ./allure-report:/tests/allure-report

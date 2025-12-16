@@ -1,0 +1,17 @@
+node_modules/
+.vscode/
+.idea/
+build/
+.DS_Store
+*/.DS_Store
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# allure
+/allure-results/
+/allure-report/
