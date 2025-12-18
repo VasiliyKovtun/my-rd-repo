@@ -1,0 +1,26 @@
+FROM mcr.microsoft.com/playwright:v1.57.0-jammy
+
+WORKDIR /tests
+
+# 🔹 Устанавливаем Java (обязательно для Allure CLI)
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jre && \
+    rm -rf /var/lib/apt/lists/*
+
+# 🔹 Устанавливаем JAVA_HOME
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV PATH=$JAVA_HOME/bin:$PATH
+
+# Копируем package.json
+COPY package.json package-lock.json* ./
+RUN npm install
+
+# Копируем тесты
+COPY . .
+
+CMD sh -c "\
+  echo 'Waiting for app...'; \
+  until curl -s http://lesson23-app > /dev/null; do sleep 2; done; \
+  echo 'App is up'; \
+  npm run test:allure \
+"
