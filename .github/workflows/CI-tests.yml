@@ -35,6 +35,12 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
+      - name: Debug env vars
+        run: |
+          echo "Checking env vars..."
+          test -n "$FOPHELP_LOGIN"
+          test -n "$FOPHELP_PASSWORD"
+
       - name: Run API tests
         run: npm run test:api
 
