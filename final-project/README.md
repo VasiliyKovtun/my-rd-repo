@@ -23,7 +23,7 @@ npm install
 
 ### 2. Установить браузеры
 
-npx playwright install
+npx playwright install chromium
 
 ### 3. Создать файл .env на основе примера
 
