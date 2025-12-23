@@ -4,7 +4,9 @@ import { FophelpLoginPage } from './src/pages/login.page';
 import { ConfigService } from './src/services/config.service';
 
 export default async function globalSetup(): Promise<void> {
-    const browser: Browser = await chromium.launch();
+    const browser: Browser = await chromium.launch({
+        headless: !!process.env.CI
+    });
     const context = await browser.newContext();
     const page = await context.newPage();
 
