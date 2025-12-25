@@ -32,5 +32,6 @@ export class ExpensesPage {
         await this.modalComponent.fillAmount(amount);
         await this.modalComponent.fillComment(comment);
         await this.modalComponent.clickSubmitButton();
+        await this.page.waitForTimeout(500);
     }
 }

@@ -38,9 +38,12 @@ export class TablesComponent {
     }
 
     private monthGroupByHeader(headerText: string): Locator {
+
+        const simplifiedText = headerText.replace(/\s*р\.?\s*$/, '').trim();
+
         return this.baseLocator.locator('.month-group').filter({
             has: this.page.locator('.month-header').filter({
-                hasText: headerText
+                hasText: simplifiedText
             })
         });
     }
@@ -117,8 +120,11 @@ export class TablesComponent {
 
     public async checkRecordsCountToContain(headerText: string, expectedText: string): Promise<void> {
         const locator = this.recordsCountForGroup(headerText);
-        await expect(locator).toBeVisible({ timeout: 15000 });
-        await expect(locator).toContainText(expectedText);
+
+        await expect(async () => {
+            await expect(locator).toBeVisible();
+            await expect(locator).toContainText(expectedText);
+        }).toPass({ timeout: 15000 });
     }
 
     public async checkTotalAmountToContain(headerText: string, expectedText: string): Promise<void> {

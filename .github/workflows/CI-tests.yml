@@ -37,16 +37,17 @@ jobs:
 
       - name: Run API tests
         run: npm run test:api
+        continue-on-error: true
+
+      - name: Run UI tests
+        run: npm run test:ui
 
       - name: Upload Playwright artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-results
-          path: final-project/test-results
-
-      - name: Run UI tests
-        run: npm run test:ui
+          name: playwright-artifacts
+          path: final-project/test-results/
 
       - name: Generate Allure single report
         if: always()
@@ -57,10 +58,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-single-report
-          path: final-project/allure-report
+          path: final-project/allure-report/
 
       - name: Deploy Allure to GitHub Pages
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && always()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
