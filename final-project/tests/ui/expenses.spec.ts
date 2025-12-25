@@ -1,29 +1,35 @@
 import { allure } from 'allure-playwright';
 import { test } from '../../src/fixtures/fophelp.fixture';
 import { ExpensesPage } from '../../src/pages/expenses.page';
+import { DeleteExpensesPrecondition } from 'tests/preconditions/delete-expenses.precondition';
+import { AddExpensePrecondition } from 'tests/preconditions/add-expenses.precondition';
 
 test.describe('Expenses UI', { tag: ['@expenses'] }, () => {
     let expensesPage: ExpensesPage;
-    test.beforeAll(async ({ fophelpPage, configService }) => {
-        expensesPage = new ExpensesPage(fophelpPage.pageInstance, configService);
 
-        console.log('LOGIN exists:', !!process.env.FOPHELP_LOGIN);
-        console.log('PASSWORD exists:', !!process.env.FOPHELP_PASSWORD);
+    const defaultExpenses = [
+        { Expense: '50000', Date: '2025-12-20', Comment: 'add expense 50000', Currency: 'UAH', Cash: true },
+        { Expense: '10000', Date: '2025-12-20', Comment: 'add expense 10000', Currency: 'UAH', Cash: true },
+        { Expense: '55000', Date: '2025-10-20', Comment: 'add expense 55000', Currency: 'UAH', Cash: false },
+        { Expense: '20000', Date: '2025-09-20', Comment: 'add expense 20000', Currency: 'UAH', Cash: false },
+        { Expense: '40000', Date: '2024-12-20', Comment: 'add expense 40000', Currency: 'UAH', Cash: false }
+    ];
 
-        await expensesPage.goToExpenses();
-        await expensesPage.tabsComponent.clickMenuItem('Витрати');
-
-        await expensesPage.expensesTablesComponent.deleteAllExpensesRecords();
-    });
-
-    test.beforeEach(() => {
+    test.beforeEach(async ({ fophelpPage, configService, apiRequest }, testInfo) => {
         allure.label('layer', 'ui');
         allure.tag('ui');
-    });
 
-    test.beforeEach(async ({ fophelpPage, configService }) => {
+        const deletePrecondition = new DeleteExpensesPrecondition(apiRequest);
+        await deletePrecondition.deleteAllExpenses();
+
+        const hasPrecondition = testInfo.tags.includes('@withAddPrecondition');
+
+        if (hasPrecondition) {
+            const addPrecondition = new AddExpensePrecondition(apiRequest);
+            await addPrecondition.addExpenses(defaultExpenses);
+        }
+
         expensesPage = new ExpensesPage(fophelpPage.pageInstance, configService);
-
         await expensesPage.goToExpenses();
         await expensesPage.tabsComponent.clickMenuItem('Витрати');
     });
@@ -46,7 +52,8 @@ test.describe('Expenses UI', { tag: ['@expenses'] }, () => {
         await expensesPage.expensesTablesComponent.checkTotalAmountToContain('грудень 2024 р.', '40000');
     });
 
-    test('test year filter', async () => {
+    test('test year filter', { tag: '@withAddPrecondition' }, async () => {
+
         await expensesPage.filterComponent.setYearFilter('2024');
         await expensesPage.filterComponent.checkResultQuantity('Знайдено: 1 записів');
         await expensesPage.filterComponent.checkSummaryValue('₴40000,00');
@@ -59,7 +66,8 @@ test.describe('Expenses UI', { tag: ['@expenses'] }, () => {
         await expensesPage.filterComponent.checkSummaryValue('₴175000,00');
     });
 
-    test('test month filter', async () => {
+    test('test month filter', { tag: '@withAddPrecondition' }, async () => {
+
         await expensesPage.filterComponent.setMonthFilter('Грудень');
         await expensesPage.filterComponent.checkResultQuantity('Знайдено: 3 записів');
         await expensesPage.filterComponent.checkSummaryValue('₴100000,00');
@@ -76,7 +84,8 @@ test.describe('Expenses UI', { tag: ['@expenses'] }, () => {
         await expensesPage.expensesTablesComponent.checkTotalAmountToContain('грудень 2024 р.', '40000');
     });
 
-    test('delete records', async () => {
+    test('delete records', { tag: '@withAddPrecondition' }, async () => {
+
         await expensesPage.expensesTablesComponent.deleteAllExpensesRecords();
         await expensesPage.filterComponent.checkResultQuantity('Знайдено: 0 записів');
         await expensesPage.filterComponent.checkSummaryValue('0.00₴');

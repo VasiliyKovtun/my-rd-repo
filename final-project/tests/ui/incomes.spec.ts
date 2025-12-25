@@ -1,30 +1,35 @@
 import { allure } from 'allure-playwright';
 import { test } from '../../src/fixtures/fophelp.fixture';
 import { IncomesPage } from '../../src/pages/incomes.page';
+import { DeleteIncomesPrecondition } from 'tests/preconditions/delete-incomes.precondition';
+import { AddIncomePrecondition } from 'tests/preconditions/add-incomes.precondition';
 
 test.describe('Incomes UI', { tag: ['@incomes'] }, () => {
     let incomesPage: IncomesPage;
 
-    test.beforeAll(async ({ fophelpPage, configService }) => {
-        incomesPage = new IncomesPage(fophelpPage.pageInstance, configService);
+    const defaultIncomes = [
+        { Income: '50000', Date: '2025-12-20', Comment: 'add income 50000', Currency: 'UAH', Cash: true },
+        { Income: '10000', Date: '2025-12-20', Comment: 'add income 10000', Currency: 'UAH', Cash: true },
+        { Income: '55000', Date: '2025-10-20', Comment: 'add income 55000', Currency: 'UAH', Cash: false },
+        { Income: '20000', Date: '2025-09-20', Comment: 'add income 20000', Currency: 'UAH', Cash: false },
+        { Income: '40000', Date: '2024-12-20', Comment: 'add income 40000', Currency: 'UAH', Cash: false }
+    ];
 
-        console.log('LOGIN exists:', !!process.env.FOPHELP_LOGIN);
-        console.log('PASSWORD exists:', !!process.env.FOPHELP_PASSWORD);
-
-        await incomesPage.goToIncomes();
-        await incomesPage.tabsComponent.clickMenuItem('Прибутки');
-
-        await incomesPage.incomesTablesComponent.deleteAllIncomesRecords();
-    });
-
-    test.beforeEach(() => {
+    test.beforeEach(async ({ fophelpPage, configService, apiRequest }, testInfo) => {
         allure.label('layer', 'ui');
         allure.tag('ui');
-    });
 
-    test.beforeEach(async ({ fophelpPage, configService }) => {
+        const deletePrecondition = new DeleteIncomesPrecondition(apiRequest);
+        await deletePrecondition.deleteAllIncomes();
+
+        const hasPrecondition = testInfo.tags.includes('@withAddPrecondition');
+
+        if (hasPrecondition) {
+            const addPrecondition = new AddIncomePrecondition(apiRequest);
+            await addPrecondition.addIncomes(defaultIncomes);
+        }
+
         incomesPage = new IncomesPage(fophelpPage.pageInstance, configService);
-
         await incomesPage.goToIncomes();
         await incomesPage.tabsComponent.clickMenuItem('Прибутки');
     });
@@ -48,7 +53,7 @@ test.describe('Incomes UI', { tag: ['@incomes'] }, () => {
         await incomesPage.incomesTablesComponent.checkTotalAmountToContain('грудень 2024 р.', '40000');
     });
 
-    test('test year filter', async () => {
+    test('test year filter', { tag: '@withAddPrecondition' }, async () => {
         await incomesPage.filterComponent.setYearFilter('2024');
 
         await incomesPage.filterComponent.checkResultQuantity('Знайдено: 1 записів');
@@ -62,7 +67,7 @@ test.describe('Incomes UI', { tag: ['@incomes'] }, () => {
         await incomesPage.filterComponent.checkSummaryValue('₴175000,00');
     });
 
-    test('test month filter', async () => {
+    test('test month filter', { tag: '@withAddPrecondition' }, async () => {
         await incomesPage.filterComponent.setMonthFilter('Грудень');
 
         await incomesPage.filterComponent.checkResultQuantity('Знайдено: 3 записів');
@@ -80,7 +85,7 @@ test.describe('Incomes UI', { tag: ['@incomes'] }, () => {
         await incomesPage.incomesTablesComponent.checkTotalAmountToContain('грудень 2024 р.', '40000');
     });
 
-    test('delete records', async () => {
+    test('delete records', { tag: '@withAddPrecondition' }, async () => {
         await incomesPage.incomesTablesComponent.deleteAllIncomesRecords();
 
         await incomesPage.filterComponent.checkResultQuantity('Знайдено: 0 записів');

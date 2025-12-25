@@ -1,10 +1,10 @@
-import { test as base, Browser } from '@playwright/test';
+import { APIRequestContext, test as base, Browser, request } from '@playwright/test';
 import { FophelpPage } from '../pages/fophelp.page';
 import { FophelpLoginPage } from '../pages/login.page';
 import fs from 'fs';
 import { ConfigService } from '../services/config.service';
 
-console.log('storageState exists:', fs.existsSync('.auth/storage-state-0.json'));
+import { getApiBaseUrl } from '../../config';
 
 interface WorkerFixtures {
     authState: string;
@@ -13,6 +13,7 @@ interface WorkerFixtures {
 interface TestFixtures {
     fophelpPage: FophelpPage;
     configService: ConfigService;
+    apiRequest: APIRequestContext;
 }
 
 const storageStatePath = '.auth/storage-state-0.json';
@@ -42,6 +43,17 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
         await context.close();
     },
 
+    // eslint-disable-next-line no-empty-pattern
+    apiRequest: async ({}, use) => {
+        const context = await request.newContext({
+            baseURL: getApiBaseUrl(),
+            storageState: storageStatePath // <<< ключевой фикс
+        });
+
+        await use(context);
+        await context.dispose();
+    },
+
     configService: async ({ browserName }, use) => {
         console.log(browserName);
         const configService = new ConfigService();
@@ -49,13 +61,13 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
     }
 });
 
-async function authenticateFophelp(browser: Browser, path: string): Promise<void> {
+async function authenticateFophelp(browser: Browser, storagePath: string): Promise<void> {
     const context = await browser.newContext();
     const page = await context.newPage();
 
     const loginPage = new FophelpLoginPage(page, new ConfigService());
     await loginPage.login(0);
 
-    await context.storageState({ path });
+    await context.storageState({ path: storagePath });
     await context.close();
 }

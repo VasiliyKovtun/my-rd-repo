@@ -1,7 +1,7 @@
 export interface ExpenseV2 {
     expense: number | string;
     id: string;
-    dt: string; // ISO date
+    dt: string;
     userID: string;
     comment: string;
     type: string | null;

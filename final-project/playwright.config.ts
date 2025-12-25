@@ -36,15 +36,20 @@ export default defineConfig({
     ],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
-        headless: isCI,
         storageState: '.auth/storage-state-0.json',
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
         trace: 'retain-on-failure',
+        headless: isCI,
         // this will work if the playwright is controlling context and page for you
         // In our case when we use fixture that injects only browser instance and we are creating our own context and page it will not work
         // In that case we should add video recording options during context creation
         video: 'retain-on-failure',
-        screenshot: 'only-on-failure'
+        screenshot: 'only-on-failure',
+        actionTimeout: 10_000
+    },
+
+    expect: {
+        timeout: 10_000
     },
 
     /* Configure projects for major browsers */
@@ -53,7 +58,6 @@ export default defineConfig({
             name: 'chromium',
             use: {
                 ...devices['Desktop Chrome'],
-                headless: isCI,
                 viewport: {
                     width: 1920,
                     height: 1080

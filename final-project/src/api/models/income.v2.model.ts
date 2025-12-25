@@ -1,7 +1,7 @@
 export interface IncomeV2 {
     income: number | string;
     id: string;
-    dt: string; // ISO date
+    dt: string;
     userID: string;
     comment: string;
     type: string | null;

@@ -2,6 +2,7 @@ import { test as base, request, APIRequestContext, expect as baseExpect } from '
 import { IncomeRecord } from '../api/incomes.record';
 import { ExpensesRecord } from '../api/expenses.record';
 import { getApiBaseUrl } from '../../config';
+import { getApiCookies } from '../api/auth.utils';
 
 interface TestFixtures {
     apiRequest: APIRequestContext;
@@ -12,11 +13,11 @@ interface TestFixtures {
 export const test = base.extend<TestFixtures>({
     // eslint-disable-next-line no-empty-pattern
     apiRequest: async ({}, use) => {
-        const baseURL = getApiBaseUrl();
-
         const context = await request.newContext({
-            baseURL,
-            storageState: '.auth/storage-state-0.json'
+            baseURL: getApiBaseUrl(),
+            extraHTTPHeaders: {
+                Cookie: getApiCookies()
+            }
         });
 
         await use(context);
