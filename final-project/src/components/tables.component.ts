@@ -39,7 +39,9 @@ export class TablesComponent {
 
     private monthGroupByHeader(headerText: string): Locator {
         return this.baseLocator.locator('.month-group').filter({
-            has: this.page.getByText(headerText, { exact: false })
+            has: this.page.locator('.month-header').filter({
+                hasText: headerText
+            })
         });
     }
 
@@ -125,8 +127,9 @@ export class TablesComponent {
         await expect(async () => {
             await expect(locator).toBeVisible();
             const rawText = await locator.textContent() ?? '';
-            const cleanText = rawText.replace(/\s/g, '').replace(/\u00a0/g, '');
-            expect(cleanText).toContain(expectedText);
+            const cleanText = rawText.replace(/[\s\u00a0]/g, '');
+            const cleanExpected = expectedText.replace(/[\s\u00a0]/g, '');
+            expect(cleanText).toContain(cleanExpected);
         }).toPass({
             timeout: 15000
         });
