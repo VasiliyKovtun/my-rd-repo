@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from '@playwright/test';
+import { Dialog, expect, Locator, Page } from '@playwright/test';
 
 export class TablesComponent {
     public readonly page: Page;
@@ -38,7 +38,9 @@ export class TablesComponent {
     }
 
     private monthGroupByHeader(headerText: string): Locator {
-        return this.baseLocator.locator('.month-group').filter({ hasText: headerText });
+        return this.baseLocator.locator('.month-group').filter({
+            has: this.page.getByText(headerText, { exact: false })
+        });
     }
 
     public recordsCountForGroup(headerText: string): Locator {
@@ -61,6 +63,7 @@ export class TablesComponent {
 
     public async deleteAllIncomesRecords(): Promise<void> {
         const deleteButtons = this.incomesDeleteButton;
+
         try {
             await deleteButtons.first().waitFor({ state: 'visible', timeout: 3000 });
         } catch {
@@ -69,21 +72,24 @@ export class TablesComponent {
 
         let count = await deleteButtons.count();
         while (count > 0) {
-            this.page.once('dialog', async (dialog) => {
+            const handleDialog = async (dialog: Dialog): Promise<void> => {
                 await dialog.accept();
-            });
+            };
+
+            this.page.once('dialog', handleDialog);
 
             await deleteButtons.first().click();
 
-            if (count > 0) {
-                await expect(deleteButtons).toHaveCount(count - 1);
-            }
+            await expect(deleteButtons).toHaveCount(count - 1);
+
             count = await deleteButtons.count();
+            if (count === 0) break;
         }
     }
 
     public async deleteAllExpensesRecords(): Promise<void> {
         const deleteButtons = this.expensesDeleteButton;
+
         try {
             await deleteButtons.first().waitFor({ state: 'visible', timeout: 3000 });
         } catch {
@@ -92,34 +98,38 @@ export class TablesComponent {
 
         let count = await deleteButtons.count();
         while (count > 0) {
-            this.page.once('dialog', async (dialog) => {
+            const handleDialog = async (dialog: Dialog): Promise<void> => {
                 await dialog.accept();
-            });
+            };
+
+            this.page.once('dialog', handleDialog);
 
             await deleteButtons.first().click();
 
-            if (count > 0) {
-                await expect(deleteButtons).toHaveCount(count - 1);
-            }
+            await expect(deleteButtons).toHaveCount(count - 1);
+
             count = await deleteButtons.count();
+            if (count === 0) break;
         }
     }
 
     public async checkRecordsCountToContain(headerText: string, expectedText: string): Promise<void> {
         const locator = this.recordsCountForGroup(headerText);
-        await locator.waitFor({ state: 'visible' });
+        await expect(locator).toBeVisible({ timeout: 15000 });
         await expect(locator).toContainText(expectedText);
     }
 
     public async checkTotalAmountToContain(headerText: string, expectedText: string): Promise<void> {
         const locator = this.totalAmountForGroup(headerText);
-        await locator.waitFor({ state: 'visible' });
 
         await expect(async () => {
-            let text = (await locator.textContent()) ?? '';
-            text = text.replace(/\s/g, '');
-            expect(text).toContain(expectedText);
-        }).toPass();
+            await expect(locator).toBeVisible();
+            const rawText = await locator.textContent() ?? '';
+            const cleanText = rawText.replace(/\s/g, '').replace(/\u00a0/g, '');
+            expect(cleanText).toContain(expectedText);
+        }).toPass({
+            timeout: 15000
+        });
     }
 
     public async checkEmptyStateTable(): Promise<void> {

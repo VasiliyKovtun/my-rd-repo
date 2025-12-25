@@ -1,7 +1,11 @@
-import { Locator } from '@playwright/test';
+import { Locator, expect, Page } from '@playwright/test';
 
 export class ModalComponent {
     public constructor(private readonly baseLocator: Locator) {}
+
+    private page(): Page {
+        return this.baseLocator.page();
+    }
 
     private get dateField(): Locator {
         return this.baseLocator.locator('#date');
@@ -23,13 +27,22 @@ export class ModalComponent {
         return this.baseLocator.locator('.btn.btn-secondary');
     }
 
-    public async fillDate(quantity: string): Promise<void> {
+    public async fillDate(date: string): Promise<void> {
         await this.dateField.waitFor({ state: 'visible' });
-        await this.dateField.click({ delay: 100 });
-        await this.dateField.type(quantity, { delay: 100 });
+
+        await this.dateField.click();
+        const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
+        await this.page().keyboard.press(`${modifier}+A`);
+        await this.page().keyboard.press('Backspace');
+
+        const digitsOnly = date.replace(/\D/g, '');
+
+        await this.dateField.pressSequentially(digitsOnly, { delay: 150 });
+        await this.dateField.press('Tab');
     }
 
     public async fillAmount(amount: string): Promise<void> {
+        await this.amountField.waitFor({ state: 'visible' });
         await this.amountField.fill(amount);
     }
 
@@ -38,6 +51,7 @@ export class ModalComponent {
     }
 
     public async clickSubmitButton(): Promise<void> {
+        await expect(this.submitButton).toBeEnabled({ timeout: 5000 });
         await this.submitButton.click();
         await this.baseLocator.waitFor({ state: 'hidden' });
     }
