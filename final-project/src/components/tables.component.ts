@@ -61,65 +61,65 @@ export class TablesComponent {
 
     public async deleteAllIncomesRecords(): Promise<void> {
         const deleteButtons = this.incomesDeleteButton;
-        await deleteButtons
-            .first()
-            .waitFor({
-                state: 'visible',
-                timeout: 2000
-            })
-            .catch(() => {
-                return;
-            });
-        const count = await deleteButtons.count();
+        try {
+            await deleteButtons.first().waitFor({ state: 'visible', timeout: 3000 });
+        } catch {
+            return;
+        }
 
-        if (count === 0) return;
-
-        for (let i = 0; i < count; i++) {
+        let count = await deleteButtons.count();
+        while (count > 0) {
             this.page.once('dialog', async (dialog) => {
                 await dialog.accept();
             });
 
             await deleteButtons.first().click();
-            await expect(deleteButtons).toHaveCount(count - i - 1);
+
+            if (count > 0) {
+                await expect(deleteButtons).toHaveCount(count - 1);
+            }
+            count = await deleteButtons.count();
         }
     }
 
     public async deleteAllExpensesRecords(): Promise<void> {
         const deleteButtons = this.expensesDeleteButton;
-        await deleteButtons
-            .first()
-            .waitFor({
-                state: 'visible',
-                timeout: 2000
-            })
-            .catch(() => {
-                return;
-            });
-        const count = await deleteButtons.count();
+        try {
+            await deleteButtons.first().waitFor({ state: 'visible', timeout: 3000 });
+        } catch {
+            return;
+        }
 
-        if (count === 0) return;
-
-        for (let i = 0; i < count; i++) {
+        let count = await deleteButtons.count();
+        while (count > 0) {
             this.page.once('dialog', async (dialog) => {
                 await dialog.accept();
             });
 
             await deleteButtons.first().click();
-            await expect(deleteButtons).toHaveCount(count - i - 1);
+
+            if (count > 0) {
+                await expect(deleteButtons).toHaveCount(count - 1);
+            }
+            count = await deleteButtons.count();
         }
     }
 
     public async checkRecordsCountToContain(headerText: string, expectedText: string): Promise<void> {
-        await expect(this.recordsCountForGroup(headerText)).toContainText(expectedText);
+        const locator = this.recordsCountForGroup(headerText);
+        await locator.waitFor({ state: 'visible' });
+        await expect(locator).toContainText(expectedText);
     }
 
     public async checkTotalAmountToContain(headerText: string, expectedText: string): Promise<void> {
-        const locator: Locator = this.totalAmountForGroup(headerText);
+        const locator = this.totalAmountForGroup(headerText);
+        await locator.waitFor({ state: 'visible' });
 
-        let text = (await locator.textContent()) ?? '';
-        text = text.replace(/\s/g, '');
-
-        expect(text).toContain(expectedText.toString());
+        await expect(async () => {
+            let text = (await locator.textContent()) ?? '';
+            text = text.replace(/\s/g, '');
+            expect(text).toContain(expectedText);
+        }).toPass();
     }
 
     public async checkEmptyStateTable(): Promise<void> {

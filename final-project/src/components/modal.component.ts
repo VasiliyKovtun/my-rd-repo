@@ -39,9 +39,11 @@ export class ModalComponent {
 
     public async clickSubmitButton(): Promise<void> {
         await this.submitButton.click();
+        await this.baseLocator.waitFor({ state: 'hidden' });
     }
 
     public async clickCancelButton(): Promise<void> {
         await this.cancelButton.click();
+        await this.baseLocator.waitFor({ state: 'hidden' });
     }
 }
