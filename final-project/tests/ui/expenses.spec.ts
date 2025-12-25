@@ -34,12 +34,15 @@ test.describe('Expenses UI', { tag: ['@expenses'] }, () => {
         await expensesPage.tabsComponent.clickMenuItem('Витрати');
     });
 
-    test('add expenses and verify adding', async () => {
+    test('add expenses and verify adding', async ({ fophelpPage }) => {
         await expensesPage.addRecord('20122025', '50000', 'add expense 50000');
         await expensesPage.addRecord('20122025', '10000', 'add expense 10000');
         await expensesPage.addRecord('20102025', '55000', 'add expense 55000');
         await expensesPage.addRecord('20092025', '20000', 'add expense 20000');
         await expensesPage.addRecord('20122024', '40000', 'add expense 40000');
+
+        await fophelpPage.pageInstance.reload();
+
         await expensesPage.filterComponent.checkResultQuantity('Знайдено: 5 записів');
         await expensesPage.filterComponent.checkSummaryValue('₴175000,00');
         await expensesPage.expensesTablesComponent.checkRecordsCountToContain('грудень 2025 р.', 'Записів: 2');

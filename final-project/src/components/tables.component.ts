@@ -39,11 +39,12 @@ export class TablesComponent {
 
     private monthGroupByHeader(headerText: string): Locator {
 
-        const simplifiedText = headerText.replace(/\s*р\.?\s*$/, '').trim();
+        const cleanHeader = headerText.replace(/\s*р\.?\s*$/, '').trim();
 
         return this.baseLocator.locator('.month-group').filter({
             has: this.page.locator('.month-header').filter({
-                hasText: simplifiedText
+                // search: cleanHeader, case-insensitive
+                hasText: new RegExp(cleanHeader, 'i')
             })
         });
     }

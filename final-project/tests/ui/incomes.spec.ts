@@ -34,12 +34,15 @@ test.describe('Incomes UI', { tag: ['@incomes'] }, () => {
         await incomesPage.tabsComponent.clickMenuItem('Прибутки');
     });
 
-    test('add incomes and verify adding', async () => {
+    test('add incomes and verify adding', async ({ fophelpPage }) => {
         await incomesPage.addRecord('20122025', '50000', 'add income 50000');
         await incomesPage.addRecord('20122025', '10000', 'add income 10000');
         await incomesPage.addRecord('20102025', '55000', 'add income 55000');
         await incomesPage.addRecord('20092025', '20000', 'add income 20000');
         await incomesPage.addRecord('20122024', '40000', 'add income 40000');
+
+        await fophelpPage.pageInstance.reload();
+
         await incomesPage.filterComponent.checkResultQuantity('Знайдено: 5 записів');
         await incomesPage.filterComponent.checkSummaryValue('₴175000,00');
         await incomesPage.incomesTablesComponent.checkRecordsCountToContain('грудень 2025 р.', 'Записів: 2');
