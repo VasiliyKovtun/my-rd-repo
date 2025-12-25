@@ -20,7 +20,7 @@ export default defineConfig({
     workers: process.env.CI ? 1 : 1,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
     // reporter: [['html'], ['allure-playwright'], ['json']],
-    timeout: 45000,
+    timeout: process.env.CI ? 60_000 : 30_000,
     globalTeardown: require.resolve('./tests/ui/global-teardown'),
     globalSetup: './global-setup.ts',
     reporter: [
@@ -37,13 +37,14 @@ export default defineConfig({
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
         headless: isCI,
-
+        storageState: '.auth/storage-state-0.json',
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
         trace: 'retain-on-failure',
         // this will work if the playwright is controlling context and page for you
         // In our case when we use fixture that injects only browser instance and we are creating our own context and page it will not work
         // In that case we should add video recording options during context creation
-        video: 'on'
+        video: 'retain-on-failure',
+        screenshot: 'only-on-failure'
     },
 
     /* Configure projects for major browsers */
@@ -54,8 +55,8 @@ export default defineConfig({
                 ...devices['Desktop Chrome'],
                 headless: isCI,
                 viewport: {
-                    width: 1680,
-                    height: 900
+                    width: 1920,
+                    height: 1080
                 }
                 // storageState: '.auth/storage-state-0.json'
             }

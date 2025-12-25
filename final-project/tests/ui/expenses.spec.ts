@@ -7,6 +7,9 @@ test.describe('Expenses UI', { tag: ['@expenses'] }, () => {
     test.beforeAll(async ({ fophelpPage, configService }) => {
         expensesPage = new ExpensesPage(fophelpPage.pageInstance, configService);
 
+        console.log('LOGIN exists:', !!process.env.FOPHELP_LOGIN);
+        console.log('PASSWORD exists:', !!process.env.FOPHELP_PASSWORD);
+
         await expensesPage.goToExpenses();
         await expensesPage.tabsComponent.clickMenuItem('Витрати');
 

@@ -38,6 +38,13 @@ jobs:
       - name: Run API tests
         run: npm run test:api
 
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: final-project/test-results
+
       - name: Run UI tests
         run: npm run test:ui
 

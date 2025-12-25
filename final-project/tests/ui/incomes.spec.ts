@@ -8,6 +8,9 @@ test.describe('Incomes UI', { tag: ['@incomes'] }, () => {
     test.beforeAll(async ({ fophelpPage, configService }) => {
         incomesPage = new IncomesPage(fophelpPage.pageInstance, configService);
 
+        console.log('LOGIN exists:', !!process.env.FOPHELP_LOGIN);
+        console.log('PASSWORD exists:', !!process.env.FOPHELP_PASSWORD);
+
         await incomesPage.goToIncomes();
         await incomesPage.tabsComponent.clickMenuItem('Прибутки');
 

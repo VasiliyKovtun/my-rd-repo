@@ -4,6 +4,8 @@ import { FophelpLoginPage } from '../pages/login.page';
 import fs from 'fs';
 import { ConfigService } from '../services/config.service';
 
+console.log('storageState exists:', fs.existsSync('.auth/storage-state-0.json'));
+
 interface WorkerFixtures {
     authState: string;
 }
