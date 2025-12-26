@@ -1,0 +1,8 @@
+{
+    "uiConfig": {
+        "fophelpBaseUrl": "https://new.fophelp.pro/"
+    },
+    "apiConfig": {
+        "fophelpApiUrl": "https://new.fophelp.pro/api/v2.0/"
+    }
+}
