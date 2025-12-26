@@ -4,7 +4,7 @@ import { IncomesPage } from '../../src/pages/incomes.page';
 import { DeleteIncomesPrecondition } from 'tests/preconditions/delete-incomes.precondition';
 import { AddIncomePrecondition } from 'tests/preconditions/add-incomes.precondition';
 
-test.describe('Incomes UI', { tag: ['@incomes'] }, () => {
+test.describe('02 - Incomes UI', { tag: ['@incomes'] }, () => {
     let incomesPage: IncomesPage;
 
     const defaultIncomes = [

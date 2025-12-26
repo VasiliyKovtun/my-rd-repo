@@ -4,7 +4,7 @@ import { ExpensesPage } from '../../src/pages/expenses.page';
 import { DeleteExpensesPrecondition } from 'tests/preconditions/delete-expenses.precondition';
 import { AddExpensePrecondition } from 'tests/preconditions/add-expenses.precondition';
 
-test.describe('Expenses UI', { tag: ['@expenses'] }, () => {
+test.describe('02 - Expenses UI', { tag: ['@expenses'] }, () => {
     let expensesPage: ExpensesPage;
 
     const defaultExpenses = [

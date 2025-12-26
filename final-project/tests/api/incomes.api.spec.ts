@@ -3,7 +3,7 @@ import { IncomeV2 } from '../../src/api/models/income.v2.model';
 import { extractIncomeIdFromResponse } from '../../src/api/utils/income-response.parser';
 import { allure } from 'allure-playwright';
 
-test.describe('Incomes API', () => {
+test.describe('01 - Incomes API', () => {
     let createdIncomeId: string;
     let createdIncomeAmount = 10;
     let createdIncomeComment = 'added via API test';

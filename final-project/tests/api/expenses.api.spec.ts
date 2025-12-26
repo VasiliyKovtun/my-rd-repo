@@ -3,7 +3,7 @@ import { ExpenseV2 } from '../../src/api/models/expense.v2.model';
 import { extractExpenseIdFromResponse } from '../../src/api/utils/expense-response.parser';
 import { allure } from 'allure-playwright';
 
-test.describe('Expenses API', () => {
+test.describe('01 - Expenses API', () => {
     let createdExpenseId: string;
     let createdExpenseAmount = 10;
     let createdExpenseComment = 'added via API test';
