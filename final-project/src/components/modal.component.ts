@@ -29,15 +29,15 @@ export class ModalComponent {
 
     public async fillDate(date: string): Promise<void> {
         await this.dateField.waitFor({ state: 'visible' });
+        let formattedDate = date;
 
-        await this.dateField.click();
-        const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
-        await this.page().keyboard.press(`${modifier}+A`);
-        await this.page().keyboard.press('Backspace');
-
-        const digitsOnly = date.replace(/\D/g, '');
-
-        await this.dateField.pressSequentially(digitsOnly, { delay: 150 });
+        if (date.length === 8 && /^\d+$/.test(date)) {
+            const day = date.substring(0, 2);
+            const month = date.substring(2, 4);
+            const year = date.substring(4, 8);
+            formattedDate = `${year}-${month}-${day}`;
+        }
+        await this.dateField.fill(formattedDate);
         await this.dateField.press('Tab');
     }
 

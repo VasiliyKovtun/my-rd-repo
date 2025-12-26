@@ -40,6 +40,8 @@ export default defineConfig({
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
         trace: 'retain-on-failure',
         headless: isCI,
+        locale: 'uk-UA', // или 'ru-RU'
+        timezoneId: 'Europe/Kyiv',
         // this will work if the playwright is controlling context and page for you
         // In our case when we use fixture that injects only browser instance and we are creating our own context and page it will not work
         // In that case we should add video recording options during context creation
